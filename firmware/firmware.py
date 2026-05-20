@@ -1,4 +1,4 @@
-from machine import Pin, I2C
+from machine import Pin, I2C, ADC
 import ssd1306
 import time
 
@@ -22,6 +22,7 @@ LED3_PIN = 9
 LED4_PIN = 25
 
 BATTERY_PIN = 26
+
 # --------------------
 # OLED Setup
 # --------------------
@@ -43,11 +44,31 @@ oled = ssd1306.SSD1306_I2C(
 # Button Setup
 # --------------------
 
-button = Pin(
-    BUTTON1_PIN,
-    Pin.IN,
-    Pin.PULL_UP
-)
+buttons = [
+    Pin(BUTTON1_PIN, Pin.IN, Pin.PULL_UP),
+    Pin(BUTTON2_PIN, Pin.IN, Pin.PULL_UP),
+    Pin(BUTTON3_PIN, Pin.IN, Pin.PULL_UP),
+    Pin(BUTTON4_PIN, Pin.IN, Pin.PULL_UP),
+]
+
+last_states = [1, 1, 1, 1]
+
+# --------------------
+# LED Setup
+# --------------------
+
+led1 = Pin(LED1_PIN, Pin.OUT)
+led2 = Pin(LED2_PIN, Pin.OUT)
+led3 = Pin(LED3_PIN, Pin.OUT)
+led4 = Pin(LED4_PIN, Pin.OUT)
+
+# --------------------
+# Battery Setup
+# --------------------
+
+battery_adc = ADC(BATTERY_PIN)
+
+LOW_BATTERY_THRESHOLD = 30
 
 # --------------------
 # Pages
@@ -55,8 +76,52 @@ button = Pin(
 
 page = 0
 
+# --------------------
+# Battery Functions
+# --------------------
+
+def get_battery_voltage():
+    """
+    Read battery voltage.
+    Assumes 100k/100k voltage divider.
+    """
+
+    raw = battery_adc.read_u16()
+
+    # Convert ADC reading to voltage
+    voltage = (raw / 65535) * 3.3
+
+    # Undo divider (x2)
+    battery_voltage = voltage * 2
+
+    return battery_voltage
+
+
+def get_battery_percent():
+    """
+    Approximate percentage for 3x AAA alkaline batteries.
+
+    4.5V = full
+    3.3V = empty
+    """
+
+    voltage = get_battery_voltage()
+
+    percent = int(((voltage - 3.3) / (4.5 - 3.3)) * 100)
+
+    # Clamp range
+    percent = max(0, min(100, percent))
+
+    return percent
+
+# --------------------
+# Display Functions
+# --------------------
+
 def draw_page():
     oled.fill(0)
+
+    battery = get_battery_percent()
 
     if page == 0:
         oled.text("Zach", 0, 0)
@@ -68,26 +133,68 @@ def draw_page():
         oled.text("Systems", 0, 12)
         oled.text("STATUS: OK", 0, 24)
 
+    elif page == 2:
+        oled.text("Battery", 0, 0)
+        oled.text(str(battery) + "%", 0, 12)
+
+        voltage = round(get_battery_voltage(), 2)
+        oled.text(str(voltage) + "V", 0, 24)
+
     oled.show()
 
+# --------------------
+# Button Actions
+# --------------------
+
+def handle_button_press(index):
+    global page
+
+    # Button 1
+    if index == 0:
+        page = (page + 1) % 3
+        draw_page()
+
+    # Button 2
+    elif index == 1:
+        led1.toggle()
+
+    # Button 3
+    elif index == 2:
+        led3.toggle()
+
+    # Button 4
+    elif index == 3:
+        led4.toggle()
+
+# --------------------
 # Initial Draw
+# --------------------
+
 draw_page()
 
 # --------------------
 # Main Loop
 # --------------------
 
-last_button = 1
-
 while True:
 
-    current = button.value()
+    # Check Buttons
+    for i in range(4):
 
-    # Button Press Detection
-    if last_button == 1 and current == 0:
-        page = (page + 1) % 2
-        draw_page()
+        current = buttons[i].value()
 
-    last_button = current
+        # Detect press
+        if last_states[i] == 1 and current == 0:
+            handle_button_press(i)
+
+        last_states[i] = current
+
+    # Battery Warning LED
+    battery_percent = get_battery_percent()
+
+    if battery_percent < LOW_BATTERY_THRESHOLD:
+        led2.on()
+    else:
+        led2.off()
 
     time.sleep(0.05)
