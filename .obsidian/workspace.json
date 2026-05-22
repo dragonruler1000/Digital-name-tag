@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "JOURNAL.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "JOURNAL"
+              "title": "README"
             }
           }
         ]
@@ -185,20 +185,23 @@
   },
   "active": "dba974c45be39d48",
   "lastOpenFiles": [
-    "README.md",
-    "JOURNAL.md",
-    "Images/3d-model.png",
-    "Images/3d-model.png.part",
-    "lu375hyg3.tmp",
-    "PCB/fp-info-cachev0m0TJ",
+    "PCB/fp-info-cacheos9qEZ",
     "PCB/~digital-name-tag.kicad_pcb.lck",
+    "JOURNAL.md",
+    "README.md",
+    "Images/PCB.png",
+    "Images/PCB.png.part",
+    "Images/3d-model.png.part",
+    "Images/3d-model-back.png",
+    "Images/3d-model-back.png.part",
+    "PCB/digital-name-tag-backups/digital-name-tag-2026-05-22_102215.zip",
+    "PCB/digital-name-tag-backups/digital-name-tag-2026-05-22_101137.zip",
     "PCB/~_autosave-digital-name-tag.kicad_pcb.lck",
-    "PCB/digital-name-tag-backups/digital-name-tag-2026-05-18_160110.zip",
+    "PCB/digital-name-tag-backups/digital-name-tag-2026-05-22_094555.zip",
     "PCB/_autosave-digital-name-tag.kicad_pcb",
+    "PCB/~digital-name-tag.kicad_pro.lck",
+    "Images/3d-model.png",
     "Images/Journal2.png",
-    "PCB/digital-name-tag-backups/digital-name-tag-2026-05-18_154901.zip",
-    "PCB/gerbers/digital-name-tag-job.gbrjob",
-    "PCB/gerbers/digital-name-tag-Edge_Cuts.gbr",
     "Images/Journal1.png"
   ]
 }
