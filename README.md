@@ -3,6 +3,4 @@ i made this sense i wanted a way to have a name tag that had more personality th
 
 
 ![](Images/Journal2.png)
-
-
 BOM:
