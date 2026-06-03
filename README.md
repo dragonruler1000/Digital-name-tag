@@ -5,7 +5,7 @@ i made this sense i wanted a way to have a name tag that had more personality th
 ![](Images/PCB.png)
 
 ![](Images/3d-model.png)
-![](Images/3d-model-back.png)
+![](Images/image.png)
 BOM:
 | Item Count | item name       | Unit price $ | Total Price* | Price with discounts* | Link                                                                                                               | Running total $* | Running total with coupons*    | part number | Notes                                   |
 |------------|-----------------|--------------|--------------|-----------------------|--------------------------------------------------------------------------------------------------------------------|------------------|--------------------------------|-------------|-----------------------------------------|
